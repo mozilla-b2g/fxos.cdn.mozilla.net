@@ -11,6 +11,6 @@ in the `public/` subdirectory
 
 ## Updating
 
-* fetch the latest sources: `git pull origin
+* fetch the latest sources: `git pull origin`
 * run: `sync.sh`
 
