@@ -1,21 +1,14 @@
 #!/bin/sh
 
 cd $(dirname $0)
-BUCKET=ffos-static
-hash s3cmd 2>/dev/null || { echo >&2 "s3cmd required."; exit 1; }
 
-if [ ! -e ./.s3cfg ]; then
-    echo >&2 "./.s3cfg file missing. create it from the s3cfg.template file"
-    exit 1
+if [ -z $BUCKET ]; then
+    BUCKET=ffos-static
 fi
+echo "Syncing contents to $BUCKET"
+echo "---------------------------"
 
-cd public
-s3cmd --config ../.s3cfg \
-    --verbose \
-    --progress \
-    --recursive \
-    --exclude=.DS_Store \
-    --no-preserve \
-    sync . s3://$BUCKET/
+hash aws 2>/dev/null || { echo >&2 "awscli missing. Install: pip install awscli"; exit 1; }
 
-
+aws s3 sync public "s3://$BUCKET" \
+    --exclude .DS_Store
